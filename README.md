@@ -33,7 +33,7 @@ New Features in v2.0:
 - The `progress()` and `complete()` callbacks now provide upload stats like transfer rate and time remaining.
 - Reduced memory footprint when calculating MD5 digests.
 
-New Features in v2.0.5:
+New Features in v2.1:
 - Support for Node.js FileSystem (fs) ReadbleStreams. This means you can use Electron to upload a file directly from
   the file system's native File picker and avoid the usual browser restrictions.
 
@@ -80,7 +80,7 @@ return Evaporate.create(config)
           overrides = {
             bucket: AWS_BUCKET // Shows that the bucket can be changed per
           };
-      evaporate.add(addConfig, overrrides)
+      evaporate.add(addConfig, overrides)
           .then(function (awsObjectKey) {
                 console.log('File successfully uploaded to:', awsObjectKey);
               },
