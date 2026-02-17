@@ -5,7 +5,7 @@ This is an [EvaporateJS](https://github.com/TTLabs/EvaporateJS) project - a Java
 ## Project Overview
 
 - **Main file**: `evaporate.js` - The core library implementing the S3 upload functionality
-- **Tests**: Located in `test/` directory using Mocha test framework
+- **Tests**: Located in `test/` directory using [AVA](https://github.com/avajs/ava) test framework with browser environment simulation
 - **Examples**: `example/` directory contains various usage examples including browser, Electron, and server-side signing examples
 
 ## Key Commands
@@ -17,6 +17,8 @@ npm install
 # Run tests
 npm test
 ```
+
+**Note**: Tests use browser environment simulation via jsdom and require babel-register for ES6 support.
 
 ## Architecture & Coding Conventions
 
@@ -34,5 +36,6 @@ None required for core functionality. Tests use browser environment simulation.
 ## Code Style
 
 - ESLint configuration exists at `.eslintrc`
-- Tests are written using Mocha with browser environment simulation
+- Tests are written using AVA with jsdom browser environment simulation
+- Babel transpilation for ES6 support in tests
 - The library is designed to work both in browsers and Node.js environments (with fs support for Electron)
