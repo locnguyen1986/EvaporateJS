@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - EvaporateJS Dashboard</title>
+    <link rel="stylesheet" href="assets/settings.css">
+</head>
+<body>
+    <div class="app-container">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h1>EvaporateJS</h1>
+                <span class="version">Dashboard v1.0.0</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="evaporate_example.html">Upload</a></li>
+                <li><a href="settings.html" class="active">Settings</a></li>
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            <header class="page-header">
+                <h2>Settings & Preferences</h2>
+            </header>
+
+            <div class="settings-container">
+                <!-- General Settings -->
+                <section class="settings-section">
+                    <h3>General Settings</h3>
+
+                    <div class="setting-item">
+                        <label for="refreshInterval">Dashboard Refresh Interval</label>
+                        <select id="refreshInterval">
+                            <option value="5">5 seconds</option>
+                            <option value="10">10 seconds</option>
+                            <option value="30">30 seconds</option>
+                            <option value="60">60 seconds</option>
+                            <option value="0">Manual</option>
+                        </select>
+                    </div>
+
+                    <div class="setting-item">
+                        <label for="itemsPerPage">Default Items Per Page</label>
+                        <select id="itemsPerPage">
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
+                    </div>
+
+                    <div class="setting-item">
+                        <label for="dateFormat">Date/Time Format</label>
+                        <select id="dateFormat">
+                            <option value="relative">Relative (e.g., 5 mins ago)</option>
+                            <option value="absolute">Absolute (e.g., 2024-01-15 10:30)</option>
+                        </select>
+                    </div>
+
+                    <div class="setting-item">
+                        <label for="theme">Theme</label>
+                        <div class="toggle-switch">
+                            <input type="checkbox" id="themeToggle">
+                            <label for="themeToggle" class="toggle-label">
+                                <span class="toggle-text light">Light</span>
+                                <span class="toggle-text dark">Dark</span>
+                            </label>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Notification Settings -->
+                <section class="settings-section">
+                    <h3>Notification Settings</h3>
+
+                    <div class="setting-item">
+                        <label for="uploadCompleteNotify">Upload Complete Notification</label>
+                        <div class="toggle-switch">
+                            <input type="checkbox" id="uploadCompleteNotify">
+                            <label for="uploadCompleteNotify" class="toggle-label"></label>
+                        </div>
+                    </div>
+
+                    <div class="setting-item">
+                        <label for="uploadFailedNotify">Upload Failed Notification</label>
+                        <div class="toggle-switch">
+                            <input type="checkbox" id="uploadFailedNotify">
+                            <label for="uploadFailedNotify" class="toggle-label"></label>
+                        </div>
+                    </div>
+
+                    <div class="setting-item">
+                        <label for="batchCompleteNotify">Batch Upload Complete Notification</label>
+                        <div class="toggle-switch">
+                            <input type="checkbox" id="batchCompleteNotify">
+                            <label for="batchCompleteNotify" class="toggle-label"></label>
+                        </div>
+                    </div>
+
+                    <div class="setting-item">
+                        <label for="soundEnabled">Sound Notifications</label>
+                        <div class="toggle-switch">
+                            <input type="checkbox" id="soundEnabled">
+                            <label for="soundEnabled" class="toggle-label"></label>
+                        </div>
+                    </div>
+
+                    <div class="setting-item" id="volumeContainer">
+                        <label for="volume">Notification Volume</label>
+                        <input type="range" id="volume" min="0" max="100" value="50">
+                        <span id="volumeValue">50%</span>
+                    </div>
+                </section>
+
+                <!-- Export/Import Settings -->
+                <section class="settings-section">
+                    <h3>Export/Import Settings</h3>
+
+                    <div class="setting-item">
+                        <button id="exportConfig" class="btn btn-primary">Export Configuration</button>
+                        <p class="setting-description">Download current settings as a JSON file</p>
+                    </div>
+
+                    <div class="setting-item">
+                        <label for="importConfig" class="btn btn-secondary">Import Configuration</label>
+                        <input type="file" id="importConfig" accept=".json" style="display: none;">
+                        <p class="setting-description">Restore settings from a JSON file</p>
+                    </div>
+
+                    <div class="setting-item">
+                        <button id="resetDefaults" class="btn btn-danger">Reset to Defaults</button>
+                        <p class="setting-description">Reset all settings to factory defaults</p>
+                    </div>
+                </section>
+
+                <!-- About Section -->
+                <section class="settings-section">
+                    <h3>About</h3>
+
+                    <div class="about-item">
+                        <span class="about-label">EvaporateJS Version</span>
+                        <span id="evaporateVersion" class="about-value">--</span>
+                    </div>
+
+                    <div class="about-item">
+                        <span class="about-label">Dashboard Version</span>
+                        <span class="about-value">1.0.0</span>
+                    </div>
+
+                    <div class="about-item">
+                        <span class="about-label">GitHub Repository</span>
+                        <a href="https://github.com/TTLabs/EvaporateJS" target="_blank" rel="noopener">https://github.com/TTLabs/EvaporateJS</a>
+                    </div>
+
+                    <div class="about-item">
+                        <span class="about-label">API Documentation</span>
+                        <a href="https://github.com/TTLabs/EvaporateJS#readme" target="_blank" rel="noopener">View Documentation</a>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmModal" class="modal">
+        <div class="modal-content">
+            <h3>Confirm Reset</h3>
+            <p>Are you sure you want to reset all settings to their default values? This action cannot be undone.</p>
+            <div class="modal-actions">
+                <button id="cancelReset" class="btn btn-secondary">Cancel</button>
+                <button id="confirmReset" class="btn btn-danger">Reset</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../evaporate.js"></script>
+    <script src="assets/useSettings.js"></script>
+    <script src="assets/settings.js"></script>
+</body>
+</html>
