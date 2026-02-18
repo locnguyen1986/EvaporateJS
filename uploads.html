@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <title>Upload Management - EvaporateJS</title>
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.css" crossorigin="anonymous">
+   <link rel="stylesheet" type="text/css" href="assets/uploads.css">
+</head>
+<body>
+<div class="container-fluid uploads-page">
+   <h1>Upload Management</h1>
+
+   <!-- Status Filter Tabs -->
+   <ul class="nav nav-tabs status-tabs">
+      <li class="active"><a href="#" data-status="all">All <span class="count all-count"></span></a></li>
+      <li><a href="#" data-status="uploading">Uploading <span class="count uploading-count"></span></a></li>
+      <li><a href="#" data-status="completed">Completed <span class="count completed-count"></span></a></li>
+      <li><a href="#" data-status="failed">Failed <span class="count failed-count"></span></a></li>
+      <li><a href="#" data-status="queued">Queued <span class="count queued-count"></span></a></li>
+      <li><a href="#" data-status="paused">Paused <span class="count paused-count"></span></a></li>
+   </ul>
+
+   <!-- Bulk Actions Toolbar -->
+   <div class="bulk-actions-toolbar">
+      <button type="button" class="btn btn-warning btn-sm" id="retry-all-failed" title="Retry All Failed">
+         <span class="glyphicon glyphicon-repeat"></span> Retry All Failed
+      </button>
+      <button type="button" class="btn btn-danger btn-sm" id="cancel-all" title="Cancel All">
+         <span class="glyphicon glyphicon-stop"></span> Cancel All
+      </button>
+      <button type="button" class="btn btn-success btn-sm" id="clear-completed" title="Clear Completed">
+         <span class="glyphicon glyphicon-ok"></span> Clear Completed
+      </button>
+      <span class="bulk-info"></span>
+   </div>
+
+   <!-- Data Table -->
+   <div class="table-responsive">
+      <table class="table table-striped uploads-table">
+         <thead>
+            <tr>
+               <th class="sortable" data-sort="name">
+                  File Name <span class="sort-icon glyphicon"></span>
+               </th>
+               <th class="sortable" data-sort="size">
+                  Size <span class="sort-icon glyphicon"></span>
+               </th>
+               <th class="sortable" data-sort="status">
+                  Status <span class="sort-icon glyphicon"></span>
+               </th>
+               <th class="sortable" data-sort="progress">
+                  Progress <span class="sort-icon glyphicon"></span>
+               </th>
+               <th class="sortable" data-sort="speed">
+                  Speed <span class="sort-icon glyphicon"></span>
+               </th>
+               <th class="sortable" data-sort="eta">
+                  ETA <span class="sort-icon glyphicon"></span>
+               </th>
+               <th>Actions</th>
+            </tr>
+         </thead>
+         <tbody id="uploads-tbody">
+         </tbody>
+      </table>
+   </div>
+
+   <!-- Empty State -->
+   <div class="empty-state" style="display: none;">
+      <span class="glyphicon glyphicon-folder-open"></span>
+      <p>No uploads found</p>
+   </div>
+
+   <!-- Upload Detail Modal -->
+   <div class="modal fade" id="upload-detail-modal" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-lg" role="document">
+         <div class="modal-content">
+            <div class="modal-header">
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+               </button>
+               <h4 class="modal-title">Upload Details</h4>
+            </div>
+            <div class="modal-body">
+               <div class="row">
+                  <!-- File Metadata -->
+                  <div class="col-md-6">
+                     <div class="detail-section">
+                        <h5>File Metadata</h5>
+                        <table class="table table-condensed detail-table">
+                           <tr><td><strong>Name:</strong></td><td class="detail-name"></td></tr>
+                           <tr><td><strong>Size:</strong></td><td class="detail-size"></td></tr>
+                           <tr><td><strong>Type:</strong></td><td class="detail-type"></td></tr>
+                           <tr><td><strong>Last Modified:</strong></td><td class="detail-modified"></td></tr>
+                        </table>
+                     </div>
+                  </div>
+                  <!-- S3 Destination -->
+                  <div class="col-md-6">
+                     <div class="detail-section">
+                        <h5>S3 Destination</h5>
+                        <table class="table table-condensed detail-table">
+                           <tr><td><strong>Bucket:</strong></td><td class="detail-bucket"></td></tr>
+                           <tr><td><strong>Key:</strong></td><td class="detail-key"></td></tr>
+                           <tr><td><strong>Storage Class:</strong></td><td class="detail-storage-class"></td></tr>
+                           <tr><td><strong>MD5 Checksum:</strong></td><td class="detail-md5"></td></tr>
+                        </table>
+                     </div>
+                  </div>
+               </div>
+
+               <!-- Multipart Segments -->
+               <div class="detail-section">
+                  <h5>Multipart Segments</h5>
+                  <div class="table-responsive">
+                     <table class="table table-condensed parts-table">
+                        <thead>
+                           <tr>
+                              <th>Part</th>
+                              <th>Size</th>
+                              <th>Status</th>
+                              <th>ETag</th>
+                              <th>MD5</th>
+                           </tr>
+                        </thead>
+                        <tbody class="parts-tbody">
+                        </tbody>
+                     </table>
+                  </div>
+               </div>
+
+               <!-- Upload Timeline -->
+               <div class="detail-section">
+                  <h5>Upload Timeline</h5>
+                  <ul class="timeline">
+                     <li class="timeline-item timeline-started">
+                        <span class="timeline-marker"></span>
+                        <span class="timeline-content">Started: <span class="detail-started"></span></span>
+                     </li>
+                     <li class="timeline-item timeline-progress">
+                        <span class="timeline-marker"></span>
+                        <span class="timeline-content">Progress: <span class="detail-progress-text"></span></span>
+                     </li>
+                     <li class="timeline-item timeline-verification">
+                        <span class="timeline-marker"></span>
+                        <span class="timeline-content">MD5 Verification: <span class="detail-verification"></span></span>
+                     </li>
+                     <li class="timeline-item timeline-completed" style="display: none;">
+                        <span class="timeline-marker"></span>
+                        <span class="timeline-content">Completed: <span class="detail-completed"></span></span>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+            <div class="modal-footer">
+               <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.6.4/jquery.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/js/bootstrap.js"></script>
+<script src="uploads.js"></script>
+</body>
+</html>
