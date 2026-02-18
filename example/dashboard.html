@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - EvaporateJS</title>
+  <link rel="stylesheet" href="../dashboard/styles/dashboard.css">
+</head>
+<body>
+  <div id="dashboard-app"></div>
+  <script type="module">
+    import { Dashboard } from '../dashboard/Dashboard.js';
+
+    // Mount dashboard at /dashboard route
+    const container = document.getElementById('dashboard-app');
+    Dashboard(container);
+
+    // Update URL to reflect dashboard route
+    window.history.replaceState({}, '', '/dashboard');
+    document.title = 'Dashboard - EvaporateJS';
+  </script>
+</body>
+</html>
